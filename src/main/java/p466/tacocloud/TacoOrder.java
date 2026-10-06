@@ -1,5 +1,12 @@
 package p466.tacocloud;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Date;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +19,15 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import lombok.Data;
 
 @Data
-public class TacoOrder {
+@Table("Taco_Order")
+public class TacoOrder implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private Long id;
+
+    private Date placedAt = new Date();
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;
@@ -31,9 +46,7 @@ public class TacoOrder {
     @CreditCardNumber(message = "Not a valid credit card number")
     private String ccNumber;
 
-    @Pattern(
-            regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",
-            message = "Must be formatted MM/YY")
+    @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$", message = "Must be formatted MM/YY")
     private String ccExpiration;
 
     @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
