@@ -12,17 +12,48 @@ import static org.springframework.test.web.servlet.result
 import static org.springframework.test.web.servlet.result
         .MockMvcResultMatchers.view;
 
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import p466.tacocloud.Ingredient;
+import p466.tacocloud.Ingredient.Type;
+import p466.tacocloud.data.IngredientRepository;
 
 @WebMvcTest(DesignTacoController.class)
 public class DesignTacoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private IngredientRepository ingredientRepository;
+
+    @BeforeEach
+    public void setup() {
+        List<Ingredient> ingredients = Arrays.asList(
+                new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
+                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
+                new Ingredient("GRBF", "Ground Beef", Type.PROTEIN),
+                new Ingredient("CARN", "Carnitas", Type.PROTEIN),
+                new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
+                new Ingredient("LETC", "Lettuce", Type.VEGGIES),
+                new Ingredient("CHED", "Cheddar", Type.CHEESE),
+                new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
+                new Ingredient("SLSA", "Salsa", Type.SAUCE),
+                new Ingredient("SRCR", "Sour Cream", Type.SAUCE));
+
+        when(ingredientRepository.findAll()).thenReturn(ingredients);
+    }
 
     @Test
     public void shouldDisplayDesignForm() throws Exception {

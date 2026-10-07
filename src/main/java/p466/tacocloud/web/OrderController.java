@@ -1,11 +1,9 @@
 package p466.tacocloud.web;
 
+import org.springframework.web.bind.annotation.*;
+import p466.tacocloud.data.OrderRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import jakarta.validation.Valid;
@@ -17,6 +15,12 @@ import p466.tacocloud.TacoOrder;
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
 public class OrderController {
+
+    private final OrderRepository orderRepo;
+
+    public OrderController(OrderRepository orderRepo){
+        this.orderRepo = orderRepo;
+    }
 
     @GetMapping("/current")
     public String orderForm() {
@@ -33,7 +37,7 @@ public class OrderController {
             return "orderForm";
         }
 
-        log.info("Order submitted: {}", order);
+        orderRepo.save(order);
 
         sessionStatus.setComplete();
 
