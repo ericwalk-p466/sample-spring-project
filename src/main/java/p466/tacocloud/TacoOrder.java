@@ -22,6 +22,7 @@ import lombok.Data;
 @Table("Taco_Order")
 public class TacoOrder implements Serializable {
 
+    private Long userId;
     private static final long serialVersionUID = 1L;
 
     @Id
